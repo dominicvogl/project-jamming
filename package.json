@@ -1,0 +1,23 @@
+{
+  "name": "project-jamming",
+  "version": "1.0.0",
+  "description": "spotify playlist editing application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/dominicvogl/project-jamming.git"
+  },
+  "keywords": [
+    "javascript",
+    "react",
+    "spotify",
+    "api",
+    "restful",
+    "api"
+  ],
+  "author": "Dominic Vogl",
+  "license": "ISC"
+}
