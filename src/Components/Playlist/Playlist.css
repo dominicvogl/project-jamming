@@ -30,6 +30,7 @@
     background-color: #6c41ec;
     text-align: center;
     font-size: .83rem;
+    text-transform: uppercase;
     transition: background-color .25s;
 }
 
