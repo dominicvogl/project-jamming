@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 
+import './reset.css';
 import './App.css';
+
+import SearchBar from '../SearchBar/SearchBar';
+import SearchResults from '../SearchResult/SearchResult';
+import Playlist from '../Playlist/Playlist';
 
 class App extends Component {
   render() {
