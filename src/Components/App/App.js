@@ -6,6 +6,7 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResult/SearchResult';
 import Playlist from '../Playlist/Playlist';
+import Spotify from '../../utils/Spotify';
 
 class App extends React.Component {
 
@@ -111,6 +112,11 @@ class App extends React.Component {
         console.log(trackURIs);
     }
 
+    /**
+     * Search for music on Spotify
+     * @param searchTerm
+     */
+
     search(searchTerm) {
         console.log(searchTerm);
     }
@@ -121,6 +127,7 @@ class App extends React.Component {
      */
 
     render() {
+
         return (
             <div>
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
