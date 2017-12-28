@@ -32,9 +32,21 @@ class App extends React.Component {
                     name: 'Die Hölle muss warten',
                     artist: "Eisbrecher",
                     album: 'DHMW'
+                },
+                {
+                    id: 4,
+                    name: 'Killing in the name',
+                    artist: "Rage against the machines",
+                    album: 'Rage against the machines'
+                },
+                {
+                    id: 5,
+                    name: 'Sweet Dreams',
+                    artist: "Marilyn Manson",
+                    album: 'Smells like Children'
                 }
             ],
-            playlistName: 'Jamming List',
+            playlistName: 'Jammming List',
             playlistTracks: [
                 {
                     id: 3,
@@ -47,6 +59,7 @@ class App extends React.Component {
 
         // bind functions
         this.addTrack = this.addTrack.bind(this);
+        this.removeTrack = this.removeTrack.bind(this);
     }
 
     /**
@@ -59,6 +72,11 @@ class App extends React.Component {
             let newPlaylist = this.state.playlistTracks.concat(track);
             this.setState({playlistTracks: newPlaylist});
         }
+    }
+
+    removeTrack(track) {
+        let newPlaylist = this.state.playlistTracks.filter(playlistTrack => playlistTrack.id !== track.id);
+        this.setState( {playlistTracks: newPlaylist} );
     }
 
     /**
@@ -74,7 +92,7 @@ class App extends React.Component {
                     <SearchBar/>
                     <div className="App-playlist">
                         <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults}/>
-                        <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
+                        <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
                     </div>
                 </div>
             </div>
