@@ -14,22 +14,48 @@ class App extends React.Component {
       this.state = {
          searchResults: [
             {
+               id: 1,
                name: 'Prototype',
                artist: "Eisbrecher",
                album: 'DHMW'
             },
             {
+               id: 2,
                name: 'Leider',
                artist: "Eisbrecher",
                album: 'Antikörper'
             },
             {
+               id: 3,
+               name: 'Die Hölle muss warten',
+               artist: "Eisbrecher",
+               album: 'DHMW'
+            }
+         ],
+         playlistName: 'Jamming List',
+         playlistTracks: [
+            {
+               id: 2,
+               name: 'Leider',
+               artist: "Eisbrecher",
+               album: 'Antikörper'
+            },
+            {
+               id: 3,
                name: 'Die Hölle muss warten',
                artist: "Eisbrecher",
                album: 'DHMW'
             }
          ]
       };
+
+      this.addTrack = this.addTrack.bind(this);
+   }
+
+   addTrack(track) {
+      for(let i = 0; i < this.state.playlistTracks.length; i++) {
+         console.log(i);
+      }
    }
 
    render() {
@@ -39,8 +65,8 @@ class App extends React.Component {
             <div className="App">
                <SearchBar/>
                <div className="App-playlist">
-                  <SearchResults searchResults={this.state.searchResults}/>
-                  <Playlist/>
+                  <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults}/>
+                  <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
                </div>
             </div>
          </div>
