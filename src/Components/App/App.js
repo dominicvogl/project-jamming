@@ -8,70 +8,78 @@ import SearchResults from '../SearchResult/SearchResult';
 import Playlist from '../Playlist/Playlist';
 
 class App extends React.Component {
-   constructor(props) {
-      super(props);
 
-      this.state = {
-         searchResults: [
-            {
-               id: 1,
-               name: 'Prototype',
-               artist: "Eisbrecher",
-               album: 'DHMW'
-            },
-            {
-               id: 2,
-               name: 'Leider',
-               artist: "Eisbrecher",
-               album: 'Antikörper'
-            },
-            {
-               id: 3,
-               name: 'Die Hölle muss warten',
-               artist: "Eisbrecher",
-               album: 'DHMW'
-            }
-         ],
-         playlistName: 'Jamming List',
-         playlistTracks: [
-            {
-               id: 2,
-               name: 'Leider',
-               artist: "Eisbrecher",
-               album: 'Antikörper'
-            },
-            {
-               id: 3,
-               name: 'Die Hölle muss warten',
-               artist: "Eisbrecher",
-               album: 'DHMW'
-            }
-         ]
-      };
+    constructor(props) {
+        super(props);
 
-      this.addTrack = this.addTrack.bind(this);
-   }
+        // define states for this class
+        this.state = {
+            searchResults: [
+                {
+                    id: 1,
+                    name: 'Prototype',
+                    artist: "Eisbrecher",
+                    album: 'DHMW'
+                },
+                {
+                    id: 2,
+                    name: 'Leider',
+                    artist: "Eisbrecher",
+                    album: 'Antikörper'
+                },
+                {
+                    id: 3,
+                    name: 'Die Hölle muss warten',
+                    artist: "Eisbrecher",
+                    album: 'DHMW'
+                }
+            ],
+            playlistName: 'Jamming List',
+            playlistTracks: [
+                {
+                    id: 3,
+                    name: 'Die Hölle muss warten',
+                    artist: "Eisbrecher",
+                    album: 'DHMW'
+                }
+            ]
+        };
 
-   addTrack(track) {
-      for(let i = 0; i < this.state.playlistTracks.length; i++) {
-         console.log(i);
-      }
-   }
+        // bind functions
+        this.addTrack = this.addTrack.bind(this);
+    }
 
-   render() {
-      return (
-         <div>
-            <h1>Ja<span className="highlight">mmm</span>ing</h1>
-            <div className="App">
-               <SearchBar/>
-               <div className="App-playlist">
-                  <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults}/>
-                  <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
-               </div>
+    /**
+     * Add Track to Playlist
+     * @param track
+     */
+
+    addTrack(track) {
+        if (this.state.playlistTracks.every(playlistTrack => playlistTrack.id !== track.id)) {
+            let newPlaylist = this.state.playlistTracks.concat(track);
+            this.setState({playlistTracks: newPlaylist});
+        }
+    }
+
+    /**
+     * Render all the stuff
+     * @returns {*}
+     */
+
+    render() {
+        return (
+            <div>
+                <h1>Ja<span className="highlight">mmm</span>ing</h1>
+                <div className="App">
+                    <SearchBar/>
+                    <div className="App-playlist">
+                        <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults}/>
+                        <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
+                    </div>
+                </div>
             </div>
-         </div>
-      );
-   }
+        );
+    }
 }
 
 export default App;
