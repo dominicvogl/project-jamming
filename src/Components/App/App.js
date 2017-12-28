@@ -19,31 +19,36 @@ class App extends React.Component {
                     id: 1,
                     name: 'Prototype',
                     artist: "Eisbrecher",
-                    album: 'DHMW'
+                    album: 'DHMW',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 },
                 {
                     id: 2,
                     name: 'Leider',
                     artist: "Eisbrecher",
-                    album: 'Antikörper'
+                    album: 'Antikörper',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 },
                 {
                     id: 3,
                     name: 'Die Hölle muss warten',
                     artist: "Eisbrecher",
-                    album: 'DHMW'
+                    album: 'DHMW',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 },
                 {
                     id: 4,
                     name: 'Killing in the name',
                     artist: "Rage against the machines",
-                    album: 'Rage against the machines'
+                    album: 'Rage against the machines',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 },
                 {
                     id: 5,
                     name: 'Sweet Dreams',
                     artist: "Marilyn Manson",
-                    album: 'Smells like Children'
+                    album: 'Smells like Children',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 }
             ],
             playlistName: 'Jammming List',
@@ -52,7 +57,8 @@ class App extends React.Component {
                     id: 3,
                     name: 'Die Hölle muss warten',
                     artist: "Eisbrecher",
-                    album: 'DHMW'
+                    album: 'DHMW',
+                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
                 }
             ]
         };
@@ -61,6 +67,7 @@ class App extends React.Component {
         this.addTrack = this.addTrack.bind(this);
         this.removeTrack = this.removeTrack.bind(this);
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
+        this.savePlaylist = this.savePlaylist.bind(this);
     }
 
     /**
@@ -95,6 +102,15 @@ class App extends React.Component {
     }
 
     /**
+     * save the playlist to your spotify account
+     */
+
+    savePlaylist() {
+        let trackURIs = this.state.playlistTracks.map(singleTrack => singleTrack.uri);
+        console.log(trackURIs);
+    }
+
+    /**
      * Render all the stuff
      * @returns {*}
      */
@@ -107,7 +123,7 @@ class App extends React.Component {
                     <SearchBar/>
                     <div className="App-playlist">
                         <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResults}/>
-                        <Playlist playlistName={this.state.playlistName} onNameChange={this.updatePlaylistName} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
+                        <Playlist playlistName={this.state.playlistName} onNameChange={this.updatePlaylistName} onSave={this.savePlaylist} playlistTracks={this.state.playlistTracks} onRemove={this.removeTrack}/>
                     </div>
                 </div>
             </div>
