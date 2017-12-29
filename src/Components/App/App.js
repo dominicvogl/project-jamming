@@ -10,6 +10,11 @@ import Spotify from '../../utils/Spotify';
 
 class App extends React.Component {
 
+    /**
+     * Construct the app ;-)
+     * @param props
+     */
+
     constructor(props) {
         super(props);
 
