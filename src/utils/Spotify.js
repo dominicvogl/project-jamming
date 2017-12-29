@@ -39,7 +39,8 @@ const Spotify = {
         }
     },
 
-    buildAuthorizationHeader() {
+
+    getAuthorizationHeader() {
         let token = this.getAccessToken();
         return {Authorization: `Bearer ${token}`};
     },
@@ -56,7 +57,7 @@ const Spotify = {
         let urlWithKey = `${spotifyAPISearchEndpoint}?type=track&q=${searchTerm}&limit=${this.getLimit()}`;
 
         return fetch(urlWithKey, {
-            headers: this.buildAuthorizationHeader()
+            headers: this.getAuthorizationHeader()
         })
             .then(response => {
                 if(response.ok) {
