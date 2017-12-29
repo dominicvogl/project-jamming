@@ -20,6 +20,7 @@ class App extends React.Component {
 
         // define states for this class
         this.state = {
+            userData: [],
             searchResults: [],
             playlistName: 'New Playlist',
             playlistTracks: [
@@ -51,6 +52,10 @@ class App extends React.Component {
             let newPlaylist = this.state.playlistTracks.concat(track);
             this.setState({playlistTracks: newPlaylist});
         }
+    }
+
+    showUserData() {
+        this.setState( {userData: Spotify.getUserData()} )
     }
 
     /**
@@ -89,6 +94,8 @@ class App extends React.Component {
     search(searchTerm) {
 
         console.log(searchTerm);
+
+        this.showUserData();
 
         if(searchTerm !== '') {
             Spotify.search(searchTerm).then(tracks => {

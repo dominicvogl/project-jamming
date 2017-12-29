@@ -5,6 +5,7 @@ const requestLimit = 10; // Limit responds to number (Min: 1 | Max 50)
 // Define spotify endpoints
 const spotifyAuthorizationEndpont = 'https://accounts.spotify.com/authorize';
 const spotifyAPISearchEndpoint = 'https://api.spotify.com/v1/search';
+const spotifyAPIProfileMeEndpoint = 'https://api.spotify.com/v1/me';
 
 let userAccessToken;
 let expiresIn;
@@ -34,7 +35,6 @@ const Spotify = {
         else {
             let state = 4321; // @TODO I think this value later should be generated with any hash, or?
             let authorizeURL = `${spotifyAuthorizationEndpont}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}&state=${state}`;
-            console.log(authorizeURL);
             window.location.href = authorizeURL;
         }
     },
@@ -45,11 +45,42 @@ const Spotify = {
         return {Authorization: `Bearer ${token}`};
     },
 
+    checkResponse(response) {
+        if(response.ok) {
+            console.log('Response okay');
+            return response.json();
+        }
+        throw new Error('Request failed!');
+    },
+
     getLimit() {
         if(requestLimit > 0 || requestLimit <= 50) {
             return requestLimit;
         }
         return 20;
+    },
+
+    getUserData() {
+
+        let request = `${spotifyAPIProfileMeEndpoint}`;
+
+        return fetch(request, {headers: this.getAuthorizationHeader()})
+            .then(response => this.checkResponse(response))
+            .then(jsonResponse => {
+                if(jsonResponse.user) {
+                    return jsonResponse.user.map(user => {
+                        console.log(user); 
+                        return {
+                            id: user.id,
+                            name: user.display_name
+                        }
+                    })
+                }
+                else {
+                    return [];
+                }
+            })
+
     },
 
     search(searchTerm) {
@@ -59,17 +90,12 @@ const Spotify = {
         return fetch(urlWithKey, {
             headers: this.getAuthorizationHeader()
         })
-            .then(response => {
-                if(response.ok) {
-                    return response.json();
-                }
-                throw new Error('Request failed!');
-            })
+            .then(response => this.checkResponse(response))
             // .then(response => response.json)
             .then(jsonResponse => {
                 if (jsonResponse.tracks) {
                     return jsonResponse.tracks.items.map(track => {
-                        console.log(track);
+                        // console.log(track);
                         return {
                             id: track.id,
                             name: track.name,
@@ -85,6 +111,10 @@ const Spotify = {
                     return [];
                 }
             });
+
+    },
+
+    savePlaylist(name, tracklist) {
 
     },
 
