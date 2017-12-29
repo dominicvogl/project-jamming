@@ -123,7 +123,16 @@ class App extends React.Component {
      */
 
     search(searchTerm) {
+
         console.log(searchTerm);
+
+        if(searchTerm !== '') {
+            Spotify.search(searchTerm).then(tracks => {
+                this.setState( {searchResults: tracks } )
+            })
+        }
+        return undefined;
+
     }
 
     /**
