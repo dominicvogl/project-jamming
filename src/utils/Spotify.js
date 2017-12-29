@@ -1,6 +1,8 @@
-const clientID = '1fff999f2e7e425185c7351df392c57b';
-const redirectURL = 'http://localhost:3000/';
+const clientID = '1fff999f2e7e425185c7351df392c57b'; // Spotify client id from my application
+const redirectURL = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== undefined ? ':':'') + window.location.port}/`;
+const requestLimit = 10; // Limit responds to number (Min: 1 | Max 50)
 
+// Define spotify endpoints
 const spotifyAuthorizationEndpont = 'https://accounts.spotify.com/authorize';
 const spotifyAPISearchEndpoint = 'https://api.spotify.com/v1/search';
 
@@ -12,6 +14,7 @@ const Spotify = {
     getAccessToken() {
         // Case 1: User has token
         if(userAccessToken) {
+            console.log('Token active');
             return userAccessToken;
         }
 
@@ -41,20 +44,37 @@ const Spotify = {
         return {Authorization: `Bearer ${token}`};
     },
 
+    getLimit() {
+        if(requestLimit > 0 || requestLimit <= 50) {
+            return requestLimit;
+        }
+        return 20;
+    },
+
     search(searchTerm) {
 
-        let urlWithKey = `${spotifyAPISearchEndpoint}?type=track&q=${searchTerm}`;
+        let urlWithKey = `${spotifyAPISearchEndpoint}?type=track&q=${searchTerm}&limit=${this.getLimit()}`;
 
         return fetch(urlWithKey, {
             headers: this.buildAuthorizationHeader()
         })
-            .then(response => response.json)
+            .then(response => {
+                if(response.ok) {
+                    return response.json();
+                }
+                throw new Error('Request failed!');
+            })
+            // .then(response => response.json)
             .then(jsonResponse => {
                 if (jsonResponse.tracks) {
                     return jsonResponse.tracks.items.map(track => {
+                        console.log(track);
                         return {
                             id: track.id,
                             name: track.name,
+                            image: track.album.images[2].url,
+                            duration: track.duration_ms,
+                            popularity: track.popularity,
                             uri: track.uri,
                             album: track.album.name,
                             artist: track.artists[0].name

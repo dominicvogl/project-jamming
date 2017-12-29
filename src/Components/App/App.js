@@ -20,44 +20,8 @@ class App extends React.Component {
 
         // define states for this class
         this.state = {
-            searchResults: [
-                {
-                    id: 1,
-                    name: 'Prototype',
-                    artist: "Eisbrecher",
-                    album: 'DHMW',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                },
-                {
-                    id: 2,
-                    name: 'Leider',
-                    artist: "Eisbrecher",
-                    album: 'Antikörper',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                },
-                {
-                    id: 3,
-                    name: 'Die Hölle muss warten',
-                    artist: "Eisbrecher",
-                    album: 'DHMW',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                },
-                {
-                    id: 4,
-                    name: 'Killing in the name',
-                    artist: "Rage against the machines",
-                    album: 'Rage against the machines',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                },
-                {
-                    id: 5,
-                    name: 'Sweet Dreams',
-                    artist: "Marilyn Manson",
-                    album: 'Smells like Children',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                }
-            ],
-            playlistName: 'Jammming List',
+            searchResults: [],
+            playlistName: 'New Playlist',
             playlistTracks: [
                 {
                     id: 3,
@@ -128,6 +92,7 @@ class App extends React.Component {
 
         if(searchTerm !== '') {
             Spotify.search(searchTerm).then(tracks => {
+                console.log(tracks);
                 this.setState( {searchResults: tracks } )
             })
         }
