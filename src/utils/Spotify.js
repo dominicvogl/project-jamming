@@ -66,15 +66,15 @@ const Spotify = {
 
         return fetch(request, {headers: this.getAuthorizationHeader()})
             .then(response => this.checkResponse(response))
+            // .then(response => {console.log(response)})
             .then(jsonResponse => {
-                if(jsonResponse.user) {
-                    return jsonResponse.user.map(user => {
-                        console.log(user); 
-                        return {
-                            id: user.id,
-                            name: user.display_name
-                        }
-                    })
+                if(jsonResponse) {
+                    console.log(jsonResponse.id);
+                    console.log(jsonResponse.display_name);
+                    return {
+                        id: jsonResponse.id,
+                        name: jsonResponse.display_name
+                    }
                 }
                 else {
                     return [];
@@ -91,7 +91,7 @@ const Spotify = {
             headers: this.getAuthorizationHeader()
         })
             .then(response => this.checkResponse(response))
-            // .then(response => response.json)
+            // .then(response => {console.log(response)})
             .then(jsonResponse => {
                 if (jsonResponse.tracks) {
                     return jsonResponse.tracks.items.map(track => {

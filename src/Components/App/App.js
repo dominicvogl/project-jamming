@@ -40,6 +40,7 @@ class App extends React.Component {
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
         this.savePlaylist = this.savePlaylist.bind(this);
         this.search = this.search.bind(this);
+        this.showUserData = this.showUserData.bind(this);
     }
 
     /**
@@ -54,8 +55,16 @@ class App extends React.Component {
         }
     }
 
-    showUserData() {
-        this.setState( {userData: Spotify.getUserData()} )
+    userData() {
+        // this.setState( {userData: Spotify.getUserData()} )
+
+        if(Spotify.getUserData() !== undefined) {
+            Spotify.getUserData().then(user => {
+                console.log(user);
+                this.setState( {userData: user } )
+            })
+        }
+
     }
 
     /**
@@ -92,10 +101,6 @@ class App extends React.Component {
      */
 
     search(searchTerm) {
-
-        console.log(searchTerm);
-
-        this.showUserData();
 
         if(searchTerm !== '') {
             Spotify.search(searchTerm).then(tracks => {
