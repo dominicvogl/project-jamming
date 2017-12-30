@@ -11,14 +11,14 @@ class SearchBar extends React.Component {
     }
 
     handleSearch(event) {
-        this.props.onSearch(event.target.value);
+        this.props.onClick(event.target.value);
     }
 
    render() {
       return (
          <div className="SearchBar">
-            <input placeholder="Enter A Song, Album, or Artist" onChange={this.handleSearch} />
-             <a>SEARCH</a>
+            <input placeholder="Enter A Song, Album, or Artist" />
+             <a onClick={this.handleSearch}>SEARCH</a>
          </div>
       );
    }

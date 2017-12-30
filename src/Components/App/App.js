@@ -3,6 +3,7 @@ import React from 'react';
 import './reset.css';
 import './App.css';
 
+import Header from '../Header/Header';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResult/SearchResult';
 import Playlist from '../Playlist/Playlist';
@@ -40,7 +41,7 @@ class App extends React.Component {
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
         this.savePlaylist = this.savePlaylist.bind(this);
         this.search = this.search.bind(this);
-        this.showUserData = this.showUserData.bind(this);
+        this.userData = this.userData.bind(this);
     }
 
     /**
@@ -121,7 +122,7 @@ class App extends React.Component {
 
         return (
             <div>
-                <h1>Ja<span className="highlight">mmm</span>ing</h1>
+                <Header />
                 <div className="App">
                     <SearchBar onSearch={this.search}/>
                     <div className="App-playlist">
