@@ -47,8 +47,9 @@ const Spotify = {
     },
 
     checkResponse(response) {
+        console.log(response);
+        console.log(response.ok);
         if(response.ok) {
-            // console.log('Response okay');
             return response.json();
         }
         throw new Error('Request failed!');
@@ -114,28 +115,56 @@ const Spotify = {
     },
 
     savePlaylist(name, tracklist) {
-        name = 'TEST';
-        tracklist = ['asdasdasa', 'Asdasdasd'];
-
         if(!name || !tracklist || tracklist.length === 0)
             return;
 
         const requestURL = spotifyAPIProfileMeEndpoint;
-        const headers = { headers: this.getAuthorizationHeader() }
+        const headers = { headers: this.getAuthorizationHeader() };
         let userID;
-        let playlistID;
 
         fetch(requestURL, headers)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
                 userID = jsonResponse.id;
-                console.log(userID);
+                console.log('user id: ' + userID);
             })
             .then(() => {
-                const createSpotifyPlayListUrl = `https://api.spotify.com/v1/users/${userID}/playlists`;
-                console.log(createSpotifyPlayListUrl);
+                this.createPlaylist(userID, name, tracklist);
             })
 
+    },
+
+    createPlaylist(name, tracklist, userID) {
+        const SpotifyApiCreatePlaylist = `${spotifyAPIUsersEndpoint}${userID}/playlists`;
+        let playlistID;
+
+        fetch(SpotifyApiCreatePlaylist, {
+            method: 'POST',
+            headers: this.getAuthorizationHeader(),
+            body: JSON.stringify({
+                name: name
+            })
+        })
+            .then(response => this.checkResponse(response))
+            .then(jsonResponse => {
+                playlistID = jsonResponse.id;
+                console.log('playlist id: ' + playlistID);
+            })
+            .then(() => {
+                this.addTracksToPlaylist(userID, playlistID, tracklist);
+            })
+    },
+
+    addTracksToPlaylist(userID, playlistID, tracklist) {
+        const SpotifyApiAddPlaylistTracks = `${spotifyAPIUsersEndpoint}${userID}/playlists/${playlistID}/tracks`;
+
+        fetch(SpotifyApiAddPlaylistTracks, {
+            method: 'POST',
+            headers: this.getAuthorizationHeader(),
+            body: JSON.stringify({
+                uris: tracklist
+            })
+        })
     },
 
     extract(url, reg, pos) {
