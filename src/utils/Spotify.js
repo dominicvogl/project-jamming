@@ -13,8 +13,6 @@ let expiresIn;
 
 const Spotify = {
 
-    _userID: 1337,
-
     getAccessToken() {
         // Case 1: User has token
         if(userAccessToken) {
@@ -115,38 +113,28 @@ const Spotify = {
 
     },
 
-    set userID(newID) {
-
-        console.log('Test: ' + newID);
-
-        if (typeof newID === 'string') {
-            this._userID = newID;
-        }
-        else {
-            console.log('Invalid input');
-            return 'Invalid input';
-        }
-    },
-
-    get userID() {
-        return this._userID;
-    },
-
     savePlaylist(name, tracklist) {
-        if(name === 'undefined')
-            return undefined;
+        name = 'TEST';
+        tracklist = ['asdasdasa', 'Asdasdasd'];
 
-        if(tracklist === 'undefined')
-            return undefined;
+        if(!name || !tracklist || tracklist.length === 0)
+            return;
 
-        console.group('savePlaylist');
-        this.getUserData().then(user => {
-            this.userID = user.id;
-            let requestURL = `${spotifyAPIUsersEndpoint}${user.id}/playlists`;
-            console.log(requestURL);
-        });
-        console.log(this.userID);
-        console.groupEnd();
+        const requestURL = spotifyAPIProfileMeEndpoint;
+        const headers = { headers: this.getAuthorizationHeader() }
+        let userID;
+        let playlistID;
+
+        fetch(requestURL, headers)
+            .then(response => this.checkResponse(response))
+            .then(jsonResponse => {
+                userID = jsonResponse.id;
+                console.log(userID);
+            })
+            .then(() => {
+                const createSpotifyPlayListUrl = `https://api.spotify.com/v1/users/${userID}/playlists`;
+                console.log(createSpotifyPlayListUrl);
+            })
 
     },
 
