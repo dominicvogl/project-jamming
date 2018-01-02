@@ -6,6 +6,10 @@
     margin-bottom: 6.33rem;
 }
 
+.SearchBar--Button {
+    text-transform: uppercase;
+}
+
 .SearchBar input {
     width: 287px;
     padding: .88rem 0;

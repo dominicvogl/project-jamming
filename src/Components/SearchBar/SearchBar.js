@@ -6,22 +6,47 @@ class SearchBar extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.handleSearch = this.handleSearch.bind(this);
+        this.handleTermChange = this.handleTermChange.bind(this);
+        this.search = this.search.bind(this);
+        this.state = {
+            searchTerm: ''
+        };
     }
 
-    handleSearch(event) {
-        this.props.onClick(event.target.value);
+    /**
+     * Handle the searchterm change
+     * @param event
+     */
+
+    handleTermChange(event) {
+        // Use this to search on onChange event
+        this.props.onSearch(event.target.value);
+
+        // @Reviewer
+        // save searchterm to state if you want to use search on click
+        // this.setState({searchTerm: event.target.value});
     }
 
-   render() {
-      return (
-         <div className="SearchBar">
-            <input placeholder="Enter A Song, Album, or Artist" />
-             <a onClick={this.handleSearch}>SEARCH</a>
-         </div>
-      );
-   }
+    /**
+     * Search with searchTerm from state
+     */
+
+    search() {
+        this.props.onSearch(this.state.searchTerm);
+    }
+
+    render() {
+        return (
+            <div className="SearchBar">
+                <input onChange={this.handleTermChange} placeholder="Enter A Song, Album, or Artist"/>
+                { /*
+                    @Reviewer
+                    This button is not necessary if you search on entering input
+                    <a className="SearchBar--Button" onClick={this.search}>Search</a>
+                */ }
+            </div>
+        );
+    }
 
 }
 
