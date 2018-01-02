@@ -15,7 +15,7 @@ const Spotify = {
     getAccessToken() {
         // Case 1: User has token
         if(userAccessToken) {
-            console.log('Token active');
+            // console.log('Token active');
             return userAccessToken;
         }
 

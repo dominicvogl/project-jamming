@@ -21,7 +21,10 @@ class App extends React.Component {
 
         // define states for this class
         this.state = {
-            userData: [],
+            userData: {
+                id: 1337,
+                name: 'Annonymus'
+            },
             searchResults: [],
             playlistName: 'New Playlist',
             playlistTracks: [
@@ -41,7 +44,7 @@ class App extends React.Component {
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
         this.savePlaylist = this.savePlaylist.bind(this);
         this.search = this.search.bind(this);
-        this.userData = this.userData.bind(this);
+        this.setUserData = this.setUserData.bind(this);
     }
 
     /**
@@ -56,16 +59,12 @@ class App extends React.Component {
         }
     }
 
-    userData() {
-        // this.setState( {userData: Spotify.getUserData()} )
-
+    setUserData() {
         if(Spotify.getUserData() !== undefined) {
             Spotify.getUserData().then(user => {
-                console.log(user);
                 this.setState( {userData: user } )
             })
         }
-
     }
 
     /**
@@ -103,6 +102,10 @@ class App extends React.Component {
 
     search(searchTerm) {
 
+        if(this.state.userData.id === 1337) {
+            this.setUserData();
+        }
+
         if(searchTerm !== '') {
             Spotify.search(searchTerm).then(tracks => {
                 this.setState( {searchResults: tracks } )
@@ -121,7 +124,7 @@ class App extends React.Component {
 
         return (
             <div>
-                <Header />
+                <Header userData={this.state.userData} />
                 <div className="App">
                     <SearchBar onSearch={this.search}/>
                     <div className="App-playlist">
