@@ -6,11 +6,14 @@ const requestLimit = 10; // Limit responds to number (Min: 1 | Max 50)
 const spotifyAuthorizationEndpont = 'https://accounts.spotify.com/authorize';
 const spotifyAPISearchEndpoint = 'https://api.spotify.com/v1/search';
 const spotifyAPIProfileMeEndpoint = 'https://api.spotify.com/v1/me';
+const spotifyAPIUsersEndpoint = 'https://api.spotify.com/v1/users/';
 
 let userAccessToken;
 let expiresIn;
 
 const Spotify = {
+
+    _userID: 1337,
 
     getAccessToken() {
         // Case 1: User has token
@@ -47,7 +50,7 @@ const Spotify = {
 
     checkResponse(response) {
         if(response.ok) {
-            console.log('Response okay');
+            // console.log('Response okay');
             return response.json();
         }
         throw new Error('Request failed!');
@@ -69,8 +72,6 @@ const Spotify = {
             // .then(response => {console.log(response)})
             .then(jsonResponse => {
                 if(jsonResponse) {
-                    console.log(jsonResponse.id);
-                    console.log(jsonResponse.display_name);
                     return {
                         id: jsonResponse.id,
                         name: jsonResponse.display_name
@@ -114,7 +115,38 @@ const Spotify = {
 
     },
 
+    set userID(newID) {
+
+        console.log('Test: ' + newID);
+
+        if (typeof newID === 'string') {
+            this._userID = newID;
+        }
+        else {
+            console.log('Invalid input');
+            return 'Invalid input';
+        }
+    },
+
+    get userID() {
+        return this._userID;
+    },
+
     savePlaylist(name, tracklist) {
+        if(name === 'undefined')
+            return undefined;
+
+        if(tracklist === 'undefined')
+            return undefined;
+
+        console.group('savePlaylist');
+        this.getUserData().then(user => {
+            this.userID = user.id;
+            let requestURL = `${spotifyAPIUsersEndpoint}${user.id}/playlists`;
+            console.log(requestURL);
+        });
+        console.log(this.userID);
+        console.groupEnd();
 
     },
 

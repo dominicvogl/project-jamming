@@ -91,8 +91,9 @@ class App extends React.Component {
      */
 
     savePlaylist() {
-        let trackURIs = this.state.playlistTracks.map(singleTrack => singleTrack.uri);
-        console.log(trackURIs);
+        // let trackURIs = this.state.playlistTracks.map(singleTrack => singleTrack.uri);
+        // console.log(trackURIs);
+        Spotify.savePlaylist();
     }
 
     /**
