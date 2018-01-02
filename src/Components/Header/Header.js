@@ -7,8 +7,12 @@ class Header extends React.Component {
     render() {
         return(
             <header>
-                <h1>Ja<span className="highlight">mmm</span>ing</h1>
-                <User userData={this.props.userData} />
+                <div>
+                    <h1>Ja<span className="highlight">mmm</span>ing</h1>
+                </div>
+                <div>
+                    <User userData={this.props.userData} />
+                </div>
             </header>
         )
     }
