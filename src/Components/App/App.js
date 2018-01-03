@@ -26,7 +26,7 @@ class App extends React.Component {
                 name: 'Anonymous'
             },
             searchResults: [],
-            playlistName: 'New Playlist from Jammming',
+            playlistName: 'New JAM Playlist',
             playlistTracks: []
         };
 
@@ -50,6 +50,7 @@ class App extends React.Component {
             this.setState({playlistTracks: newPlaylist});
         }
     }
+
 
     setUserData() {
         if(Spotify.getUserData() !== undefined) {

@@ -3,10 +3,17 @@ import './User.css';
 
 class User extends React.Component {
 
+    getUserName() {
+        if(this.props.userData.name == null) {
+            return this.props.userData.id;
+        }
+        return this.props.userData.name;
+    }
+
     render() {
         return(
             <div id={this.props.userData.id} className="User">
-                <span className="User-name">Your are logged in as: {this.props.userData.name}</span>
+                <span className="User-name">Your are logged in as: {this.getUserName()}</span>
                 {/*
                 @Reviewer maybe for later use:
                 <svg className="User-icon" viewBox="0 0 34 34">
