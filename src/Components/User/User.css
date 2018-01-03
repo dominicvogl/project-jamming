@@ -1,3 +1,7 @@
+:root {
+   --User-Image-Size: 35px;
+}
+
 .User {
     color: #fff;
 }
@@ -7,12 +11,25 @@
     height: auto;
 }
 
+.User-image--wrapper {
+   overflow: hidden;
+   margin: 0 0 0 10px;
+   bordeR: 2px solid #fff;
+   width: var(--User-Image-Size);
+   height: var(--User-Image-Size);
+   border-radius: var(--User-Image-Size);
+}
+
+.User-image {
+   display: block;
+}
+
 .User-icon path {
     fill: #fff;
 }
 
 .User-name {
     font-family: 'Work Sans', sans-serif;
-    padding: 8px 0 0;
+    padding: 12px 0 0;
     font-size: 0.85em;
 }
