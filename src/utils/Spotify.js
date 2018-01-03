@@ -2,6 +2,8 @@
 const clientID = '1fff999f2e7e425185c7351df392c57b';
 // redirect url generated automatically for your current environment
 const redirectURL = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== undefined ? ':':'') + window.location.port}/`;
+// console.log(redirectURL);
+// const redirectURL = `https://dv_jam.surge.sh/`;
 // global limit for results
 const resultLimit = 10; // Limit responds to number (Min: 1 | Max 50)
 
