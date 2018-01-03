@@ -26,7 +26,7 @@ class App extends React.Component {
                 name: 'Anonymous'
             },
             searchResults: [],
-            playlistName: 'New Playlist',
+            playlistName: 'New Playlist from Jammming',
             playlistTracks: []
         };
 

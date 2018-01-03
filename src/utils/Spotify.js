@@ -26,7 +26,6 @@ const Spotify = {
     getAccessToken() {
         // Case 1: User has token
         if(userAccessToken) {
-            // console.log('Token active');
             return userAccessToken;
         }
 
@@ -43,16 +42,15 @@ const Spotify = {
 
         // Case 3: Authorizize and get token
         else {
-            let state = 4321; // @TODO I think this value later should be generated with any hash, or?
-            let authorizeURL = `${spotifyAuthorizationEndpont}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}&state=${state}`;
-            window.location.href = authorizeURL;
+            let state = 1337; // @TODO I think this value later should be generated with any hash, or?
+            window.location.href = `${spotifyAuthorizationEndpont}?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}&state=${state}`;
         }
     },
 
 
     getAuthorizationHeader() {
         let token = this.getAccessToken();
-        return {Authorization: `Bearer ${token}`};
+        return { Authorization: `Bearer ${token}` };
     },
 
     checkResponse(response, url) {
@@ -81,11 +79,11 @@ const Spotify = {
 
     getUserData() {
 
-        let request = `${spotifyAPIProfileMeEndpoint}`;
+        const requestURL = `${spotifyAPIProfileMeEndpoint}`;
+        const requestHeader = { headers: this.getAuthorizationHeader() };
 
-        return fetch(request, {headers: this.getAuthorizationHeader()})
+        return fetch(requestURL, requestHeader)
             .then(response => this.checkResponse(response))
-            // .then(response => {console.log(response)})
             .then(jsonResponse => {
                 if(jsonResponse) {
                     return {
@@ -103,15 +101,17 @@ const Spotify = {
     search(searchTerm) {
 
         let urlWithKey = `${spotifyAPISearchEndpoint}?type=track&q=${searchTerm}&limit=${this.getLimit()}`;
-
-        return fetch(urlWithKey, {
+        let requestHeader = {
             headers: this.getAuthorizationHeader()
-        })
+        };
+
+        return fetch(urlWithKey, requestHeader)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
                 if (jsonResponse.tracks) {
                     return jsonResponse.tracks.items.map(track => {
                         return {
+                            // Map tracking data
                             id: track.id,
                             name: track.name,
                             image: track.album.images[2].url,
@@ -123,7 +123,7 @@ const Spotify = {
                         }}
                     )}
                 else {
-                    return [];
+                    return {};
                 }
             });
 
@@ -134,9 +134,9 @@ const Spotify = {
             return;
 
         const requestURL = spotifyAPIProfileMeEndpoint;
-        const headers = { headers: this.getAuthorizationHeader() };
+        const requestHeader = { headers: this.getAuthorizationHeader() };
 
-        return fetch(requestURL, headers)
+        return fetch(requestURL, requestHeader)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
                 let userID = jsonResponse.id;
@@ -147,15 +147,16 @@ const Spotify = {
 
     createPlaylist(name, tracklist, userID) {
         const requestURL = `${spotifyAPIUsersEndpoint}${userID}/playlists`;
-
-        return fetch(requestURL, {
+        const requestHeader = {
             method: 'POST',
             headers: this.getAuthorizationHeader(),
             body: JSON.stringify({
                 name: name,
                 public: false
             })
-        })
+        };
+
+        return fetch(requestURL, requestHeader)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
                 let playlistID = jsonResponse.id;
@@ -164,13 +165,14 @@ const Spotify = {
     },
 
     addTracksToPlaylist(userID, playlistID, tracklist) {
-        const SpotifyApiAddPlaylistTracks = `${spotifyAPIUsersEndpoint}${userID}/playlists/${playlistID}/tracks`;
-
-        return fetch(SpotifyApiAddPlaylistTracks, {
+        const requestURL = `${spotifyAPIUsersEndpoint}${userID}/playlists/${playlistID}/tracks`;
+        const requestHeader = {
             method: 'POST',
             headers: this.getAuthorizationHeader(),
             body: JSON.stringify(tracklist)
-        })
+        };
+
+        return fetch(requestURL, requestHeader)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
                 return jsonResponse.snapshot_id;
