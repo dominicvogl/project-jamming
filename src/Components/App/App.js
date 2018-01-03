@@ -23,19 +23,11 @@ class App extends React.Component {
         this.state = {
             userData: {
                 id: 1337,
-                name: 'Annonymus'
+                name: 'Anonymous'
             },
             searchResults: [],
             playlistName: 'New Playlist',
-            playlistTracks: [
-                {
-                    id: 3,
-                    name: 'Die Hölle muss warten',
-                    artist: "Eisbrecher",
-                    album: 'DHMW',
-                    uri: 'https://open.spotify.com/track/1enjOqKkJHbdqDtGtKuYW5'
-                }
-            ]
+            playlistTracks: []
         };
 
         // bind functions
@@ -92,11 +84,17 @@ class App extends React.Component {
 
     savePlaylist() {
         let trackURIs = this.state.playlistTracks.map(singleTrack => singleTrack.uri);
-        Spotify.savePlaylist(this.state.playlistName, trackURIs);
 
-        console.group('Playlist');
-        console.log(trackURIs);
-        console.groupEnd();
+        if(this.state.playlistName && trackURIs && trackURIs.length > 0) {
+            Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
+                // @TODO should be a nicer notification, like modal box
+                console.log(`new playlist "${this.state.playlistName}" with ${trackURIs.length} songs was created.`)
+                this.setState({
+                    playlistName: "New Playlist",
+                    playlistTracks: []
+                })
+            });
+        }
     }
 
     /**

@@ -1,6 +1,9 @@
-const clientID = '1fff999f2e7e425185c7351df392c57b'; // Spotify client id from my application
+// Spotify client id from my application
+const clientID = '1fff999f2e7e425185c7351df392c57b';
+// redirect url generated automatically for your current environment
 const redirectURL = `${window.location.protocol}//${window.location.hostname}${(window.location.port !== undefined ? ':':'') + window.location.port}/`;
-const requestLimit = 10; // Limit responds to number (Min: 1 | Max 50)
+// global limit for results
+const resultLimit = 10; // Limit responds to number (Min: 1 | Max 50)
 
 // Define spotify endpoints
 const spotifyAuthorizationEndpont = 'https://accounts.spotify.com/authorize';
@@ -8,10 +11,17 @@ const spotifyAPISearchEndpoint = 'https://api.spotify.com/v1/search';
 const spotifyAPIProfileMeEndpoint = 'https://api.spotify.com/v1/me';
 const spotifyAPIUsersEndpoint = 'https://api.spotify.com/v1/users/';
 
+// Define global variables
 let userAccessToken;
 let expiresIn;
 
+// Define Spotify functions
 const Spotify = {
+
+    /**
+     * Returns token or redirect to spotify login
+     * @returns {*}
+     */
 
     getAccessToken() {
         // Case 1: User has token
@@ -22,7 +32,6 @@ const Spotify = {
 
         let currentURL = window.location.href;
         userAccessToken = this.extract(currentURL, /access_token=([^&]*)/, 1);
-        console.log(userAccessToken);
 
         // Case 2: Token already in url
         if(userAccessToken) {
@@ -46,9 +55,17 @@ const Spotify = {
         return {Authorization: `Bearer ${token}`};
     },
 
-    checkResponse(response) {
-        console.log(response);
-        console.log(response.ok);
+    checkResponse(response, url) {
+        // for debugging
+        if(url) {
+            console.group('Check Response');
+            console.log('Request URL:');
+            console.info(url);
+            console.log('Response:');
+            console.log(response);
+            console.groupEnd();
+        }
+
         if(response.ok) {
             return response.json();
         }
@@ -56,8 +73,8 @@ const Spotify = {
     },
 
     getLimit() {
-        if(requestLimit > 0 || requestLimit <= 50) {
-            return requestLimit;
+        if(resultLimit > 0 || resultLimit <= 50) {
+            return resultLimit;
         }
         return 20;
     },
@@ -91,11 +108,9 @@ const Spotify = {
             headers: this.getAuthorizationHeader()
         })
             .then(response => this.checkResponse(response))
-            // .then(response => {console.log(response)})
             .then(jsonResponse => {
                 if (jsonResponse.tracks) {
                     return jsonResponse.tracks.items.map(track => {
-                        // console.log(track);
                         return {
                             id: track.id,
                             name: track.name,
@@ -120,51 +135,46 @@ const Spotify = {
 
         const requestURL = spotifyAPIProfileMeEndpoint;
         const headers = { headers: this.getAuthorizationHeader() };
-        let userID;
 
-        fetch(requestURL, headers)
+        return fetch(requestURL, headers)
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
-                userID = jsonResponse.id;
-                console.log('user id: ' + userID);
-            })
-            .then(() => {
-                this.createPlaylist(userID, name, tracklist);
+                let userID = jsonResponse.id;
+                return this.createPlaylist(name, tracklist, userID);
             })
 
     },
 
     createPlaylist(name, tracklist, userID) {
-        const SpotifyApiCreatePlaylist = `${spotifyAPIUsersEndpoint}${userID}/playlists`;
-        let playlistID;
+        const requestURL = `${spotifyAPIUsersEndpoint}${userID}/playlists`;
 
-        fetch(SpotifyApiCreatePlaylist, {
+        return fetch(requestURL, {
             method: 'POST',
             headers: this.getAuthorizationHeader(),
             body: JSON.stringify({
-                name: name
+                name: name,
+                public: false
             })
         })
             .then(response => this.checkResponse(response))
             .then(jsonResponse => {
-                playlistID = jsonResponse.id;
-                console.log('playlist id: ' + playlistID);
-            })
-            .then(() => {
-                this.addTracksToPlaylist(userID, playlistID, tracklist);
+                let playlistID = jsonResponse.id;
+                return this.addTracksToPlaylist(userID, playlistID, tracklist);
             })
     },
 
     addTracksToPlaylist(userID, playlistID, tracklist) {
         const SpotifyApiAddPlaylistTracks = `${spotifyAPIUsersEndpoint}${userID}/playlists/${playlistID}/tracks`;
 
-        fetch(SpotifyApiAddPlaylistTracks, {
+        return fetch(SpotifyApiAddPlaylistTracks, {
             method: 'POST',
             headers: this.getAuthorizationHeader(),
-            body: JSON.stringify({
-                uris: tracklist
-            })
+            body: JSON.stringify(tracklist)
         })
+            .then(response => this.checkResponse(response))
+            .then(jsonResponse => {
+                return jsonResponse.snapshot_id;
+            })
     },
 
     extract(url, reg, pos) {
