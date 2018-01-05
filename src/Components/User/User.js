@@ -18,11 +18,30 @@ class User extends React.Component {
       return userData.name;
    }
 
+   /**
+    * return user image url, when available
+    * @param userImage
+    * @returns {*}
+    */
+
+   getUserImage(userImage) {
+      if(Array.isArray(userImage)) {
+         return userImage[0].url;
+      }
+      return undefined;
+   }
+
+   /**
+    * render user name and image if data is available
+    * @param userData
+    * @returns {*}
+    */
+
    renderUserImage(userData) {
       if(userData.img) {
          return (
             <div className="User-image--wrapper">
-               <img className="User-image" src={this.props.userData.img} alt={this.getUserName(this.props.userData)}/>
+               <img className="User-image" src={this.getUserImage(userData.img)} alt={this.getUserName(userData)}/>
             </div>
          )
       }

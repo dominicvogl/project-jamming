@@ -127,7 +127,7 @@ const Spotify = {
                return {
                   id: jsonResponse.id,
                   name: jsonResponse.display_name,
-                  img: jsonResponse.images[0].url
+                  img: jsonResponse.images
                }
             }
             else {
