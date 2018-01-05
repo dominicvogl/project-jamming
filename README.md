@@ -1,2 +1,2 @@
-# Jamming
-### Codeacademy Project for learing great stuff
+# Project Jammming
+### Codeacademy Project for learning great new stuff
