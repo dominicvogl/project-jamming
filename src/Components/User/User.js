@@ -28,6 +28,7 @@ class User extends React.Component {
       if(Array.isArray(userImage)) {
          return userImage[0].url;
       }
+      // @todo IDEA: get fallback from other plattform? Or define only a standard fallback...
       return undefined;
    }
 

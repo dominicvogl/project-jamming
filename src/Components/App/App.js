@@ -91,8 +91,8 @@ class App extends React.Component {
 
       if (this.state.playlistName && trackURIs && trackURIs.length > 0) {
          Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
-            // @TODO should be a nicer notification, like modal box
-            console.log(`new playlist "${this.state.playlistName}" with ${trackURIs.length} songs was created.`)
+            // @TODO should be a nicer notification, like a nice modal box
+            alert(`new playlist "${this.state.playlistName}" with ${trackURIs.length} songs was created.`);
             this.setState({
                playlistName: "New Playlist",
                playlistTracks: []
